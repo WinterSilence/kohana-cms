@@ -1,0 +1,28 @@
+// Gallery
+// ---------------------------------------
+.f-gallery {
+	margin: 0;
+	
+	.f-gallery-item {
+		margin-bottom: @grid_gutter_width;
+	}
+
+	a {
+		text-decoration: none;
+		
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+	img {
+		.border-radius;
+		background: @color_white;
+		border: 1px solid @color_light;
+		display: block;
+		padding: 4px;
+	}
+	small {
+		display: block;
+		padding: 0 5px;
+	}
+}

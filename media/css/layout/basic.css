@@ -1,0 +1,89 @@
+html,
+body {
+	height: 100%;
+	background: #f0f0f0 url(../img/bg.jpg) left top repeat;
+}
+body .g {
+	border-left: 1px solid #d9d9d9;
+	border-right: 1px solid #d9d9d9;
+	-moz-box-shadow: 0 1px 3px 1px #e3e2e2;
+	-webkit-box-shadow: 0 1px 3px 1px #e3e2e2;
+	box-shadow: 0 1px 3px 1px #e3e2e2;
+	background: #ffffff;
+}
+article {
+	min-height: 500px;
+}
+.g > .g-row > header {
+	margin: 0 -5px;
+}
+.g > .g-row > header .f-nav-bar-body .f-nav > li > a {
+	font-weight: bold;
+}
+.g > .g-row > header .f-nav-bar-body .f-nav-list {
+	margin: 0 0 0 -5px;
+	padding: 5px 0 0 0;
+	margin-top: 0;
+	position: absolute;
+	display: none;
+	z-index: 100;
+}
+.g > .g-row > header .f-nav-bar-body .f-nav-list li {
+	background: #ffffff;
+}
+.g > .g-row > header .f-nav-bar-body li:hover .f-nav-list {
+	display: block;
+}
+.g > .g-row > header .f-nav-bar-body .f-nav-list a {
+	font-size: 12px;
+	white-space: nowrap;
+	padding: 0 15px;
+}
+#contacts {
+	list-style: none;
+	margin: 4px 15px 0 0;
+}
+#contacts li {
+	color: #ffffff;
+	font-size: 13px;
+	line-height: 18px;
+}
+#contacts li a {
+	color: #ffffff;
+	text-decoration: none;
+	text-shadow: 1px 1px 1px #727272;
+}
+#content > article.g-9 {
+	padding: 0 0 0 15px;
+	width: 685px;
+}
+#content > aside.g-3 {
+	padding: 0 15px 0 0;
+	width: 205px;
+}
+#content > aside .f-nav-list a {
+	color: #5b5959;
+	text-shadow: #cccdcf 0 0 1px;
+}
+#content > aside .f-nav-list a:hover {
+	color: #5b5959;
+}
+.g > .g-row > header .f-nav-bar .f-nav.f-nav-right {
+	padding: 0 15px;
+}
+.g > .g-row > footer > hr {
+	margin: 0 0 5px 0;
+}
+.g > .g-row > footer {
+	margin: 0 15px;
+	padding: 0 0 5px 0;
+	text-align: center;
+}
+.g > .g-row > footer a {
+	font-size: 12px;
+	text-decoration: none;
+}
+#sidebar {
+	position: fixed;
+	width: 205px;
+}

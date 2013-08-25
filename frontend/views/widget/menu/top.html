@@ -1,0 +1,18 @@
+<ul class="f-nav">
+	{foreach $items as $item}
+	<li>
+		<a href="#">Услуги</a>
+		{if isset($item.submenu)}
+		{HTML::menu($item.submenu, ['class'=>'f-nav-list f-nav-tabs'])}
+		{/if}
+	</li>
+	{/foreach}
+	
+	{$tag_pos = rand(0,2)}
+	{$attributes.class="f-nav"}
+	{HTML::a($tag.url, $tag.title, $attributes)}
+	
+
+
+</ul>
+

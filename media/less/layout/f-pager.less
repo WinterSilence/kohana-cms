@@ -1,0 +1,39 @@
+// Pager navigation
+// ---------------------------------------
+.f-pager {
+	margin: 0 0 @bottom_spacing 0;
+
+	ul {
+		margin: 0;
+		padding: 0;
+		text-align: center;
+	}
+	li {
+		display: inline;
+		list-style: none;
+		padding: 0 5px;
+	}
+	.active,
+	a {
+		text-decoration: none;
+	}
+}
+
+.f-pager-left ul {
+	text-align: left;
+}
+.f-pager-right ul {
+	text-align: right;
+}
+
+.f-pager-prev {
+	margin-right: @bottom_spacing;
+}
+.f-pager-next { 
+	margin-left: @bottom_spacing;
+}
+
+.f-pager-prev a:hover,
+.f-pager-next a:hover {
+	text-decoration: none;
+}

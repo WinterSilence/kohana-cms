@@ -1,0 +1,296 @@
+// Styles for form elements
+// ---------------------------------------
+
+// Base form styles
+// ---------------------------------------
+form {  }
+
+fieldset {
+	margin: (@bottom_spacing * 2) 0;
+}
+
+legend {
+	font-size: @h3_size;
+	font-weight: bold;
+	margin: 0;
+	padding: 0 0 (@bottom_spacing * 2) 0;
+}
+
+.f-row	{
+	margin: 0 0 @bottom_spacing 0;
+
+	> label,
+	.f-label {
+		float: left;
+		padding: @form_text_vertical_spacing 0 0 0;
+		text-align: right;
+		width: @form_label_width;
+	}
+}
+
+.f-input {
+	margin: 0 0 0 (@form_label_width + @grid_gutter_width);
+
+	+ .f-input {
+		margin-top: (@bottom_spacing / 2)
+	}
+}
+.f-input-help {
+	color: @form_help_color;
+	font-size: @form_help_text_size;
+	margin: 0;
+	padding-top: 3px;
+}
+.f-input-comment,
+.f-input-inline {
+	margin-left: 5px;
+}
+.f-input-comment {
+	display: inline-block;
+	padding: @form_text_vertical_spacing 0 0 0;
+	vertical-align: top;
+}
+
+.f-actions {
+	.border-radius(0 0 @border_radius @border_radius);
+	background: @form_action_bg;
+	margin: 0;
+	padding: @bottom_spacing @bottom_spacing @bottom_spacing (@form_label_width + @grid_gutter_width);
+}
+
+.f-horizontal {
+	.f-row > label,
+	.f-label {
+		display: block;
+		float: none;
+		padding: 0 0 @form_text_vertical_spacing;
+		text-align: left;
+		width: auto;
+	}
+	.f-input {
+		margin: 0;
+	}
+	.f-actions {
+		padding: @bottom_spacing;
+	}
+}
+
+// Inputs & buttons
+// ---------------------------------------
+select,
+textarea,
+input[type="text"],
+input[type="password"] {
+	.box-sizing;
+	border: 1px solid;
+	border-color: @form_input_border_color;
+	height: 28px;
+	padding: @form_input_vertical_spacing 6px;
+}
+.f-bu,
+select,
+input[type="text"],
+input[type="password"],
+textarea {
+	#font > .base();
+	.border-radius;
+	color: @text_color;
+	display: inline-block;
+	vertical-align: middle;
+}
+textarea {
+	height: auto;
+	overflow: auto;
+	padding-right: @form_input_vertical_spacing;
+	resize: vertical;
+}
+.f-bu,
+label,
+select,
+button {
+	cursor: pointer;
+}
+.f-bu {
+	color: @text_color;
+	overflow: visible;
+	padding: @form_input_vertical_spacing 10px;
+	position: relative;
+	text-align: center;
+	text-decoration: none;
+	z-index: 0;
+	
+	&:link,
+	&:visited,
+	&:hover,
+	&:active {
+		color: @text_color;
+	}
+	&:active {
+		padding-bottom: @form_input_vertical_spacing - 1;
+		padding-top: @form_input_vertical_spacing + 1;
+	}
+}
+select {
+	-webkit-appearance: none;
+}
+option {
+	background: @color_white;
+	padding: @form_input_vertical_spacing;
+}
+select,
+textarea,
+input[type="text"],
+input[type="password"] {
+	background: @color_white;
+}
+textarea,
+input[type="text"],
+input[type="password"] {
+	.box-shadow(inset 1px 2px 2px rgba(0, 0, 0, 0.1));
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+	border: none;
+	padding: 0;
+}
+
+.lt-ie8 {
+	select,
+	textarea,
+	input[type="text"],
+	input[type="password"] {
+		height: auto;
+	}
+}
+
+// Buttons group
+// ---------------------------------------
+.f-buttons {
+	.f-bu {
+		.border-radius(0);
+		margin: 0 0 0 -1px;
+	}
+	.f-bu:first-child {
+		.border-radius(@border_radius 0 0 @border_radius);
+	}
+	.f-bu:last-child {
+		.border-radius(0 @border_radius @border_radius 0);
+	}
+}
+
+// Butons backgrounds
+// ---------------------------------------
+.f-bu {
+	.buttonBg(@bu_bg_start, @bu_bg_end);
+	.box-shadow(inset 0 1px 0 0 rgba(255, 255, 255, .5));
+	border: 1px solid;
+	border-color: transparent rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+.f-bu-warning,
+.f-bu-success,
+.f-bu-default {
+	color: @color_white;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.f-bu-warning:link,
+.f-bu-warning:visited,
+.f-bu-warning:hover,
+.f-bu-warning:active,
+.f-bu-success:link,
+.f-bu-success:visited,
+.f-bu-success:hover,
+.f-bu-success:active,
+.f-bu-default:link,
+.f-bu-default:visited,
+.f-bu-default:hover,
+.f-bu-default:active {
+	color: @color_white;
+}
+.f-bu-default {
+	.buttonBg(@bu_info_bg_start, @bu_info_bg_end);
+}
+.f-bu-success {
+	.buttonBg(@bu_success_bg_start, @bu_success_bg_end);
+}
+.f-bu-warning {
+	.buttonBg(@bu_warning_bg_start, @bu_warning_bg_end);
+}
+
+// Checkbox and Radio
+// ---------------------------------------
+.f-radio,
+.f-check {
+	display: inline-block;
+	padding: @form_input_vertical_spacing 0 0 0;
+}
+.f-radio input,
+.f-check input {
+	margin: 2px;
+}
+
+// Focus & Active state
+// ---------------------------------------
+.f-bu {
+	&:focus,
+	&:active {
+		.box-shadow(inset 1px 2px 2px rgba(0, 0, 0, 0.1));
+		z-index: 1;
+	}
+}
+.f-bu:active,
+.f-bu:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+	border-color: #268bd2;
+	outline: none;
+}
+.f-bu:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+	.box-shadow(0 0 5px rgba(38, 139, 210, .3));
+}
+
+// Disabled state
+// ---------------------------------------
+.f-bu.disabled,
+.f-bu[disabled],
+textarea[disabled],
+select[disabled],
+input[disabled] {
+	opacity: 0.75;
+	cursor: not-allowed;
+}
+
+// Valid, invalid state
+// ---------------------------------------
+.f-valid {
+	.f-check,
+	.f-radio,
+	.f-input-comment {
+		color: @color_green;
+	}
+	
+	select,
+	textarea,
+	input[type="text"],
+	input[type="password"] {
+		border-color: @color_green;
+	}
+}
+.f-invalid {
+	.f-check,
+	.f-radio,
+	.f-input-comment {
+		color: @color_red;
+	}
+
+	select,
+	textarea,
+	input[type="text"],
+	input[type="password"] {
+		border-color: @color_red;
+	}
+}

@@ -1,0 +1,9 @@
+<h4 class="header">{'Tags cloud'|i18n}:</h4>
+<div id="tags_cloud">
+	{$tag_positions = ['top', 'middle', 'bottom']}
+	{foreach $tags as $tag}
+	{$tag_pos = rand(0,2)}
+	{$attributes.class="tag tag`$tag.weight` `$tag_positions[$tag_pos]`"}
+	{HTML::a($tag.url, $tag.title, $attributes)}
+	{/foreach}
+</div>

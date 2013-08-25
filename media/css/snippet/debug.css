@@ -1,0 +1,13 @@
+#debug li {
+	list-style-type: none;
+}
+
+#debug .header {
+	padding: 10px 0 0 0;
+	color: #ffffff;
+	cursor: pointer;
+}
+
+#debug .content {
+	display: none;
+}

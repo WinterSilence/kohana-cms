@@ -1,0 +1,45 @@
+.post .header {
+	border-bottom: 1px solid #f0f0f0;
+	padding: 0 0 3px 0;
+}
+.post .header a {
+	text-decoration: none;
+	color: #333333;
+}
+.post .header a:hover {
+	color: #636363;
+}
+.post .content p,
+.post .content dd,
+.post .content li,
+.post .content div,
+.post .content td {
+	text-align: justify;
+}
+.post .content .f-bwi-pic {
+	margin: 0 10px 9px 0;
+}
+.post .content a.show {
+	clear: both;
+	display: block;
+	text-align: right;
+	color: #7d8a9c;
+}
+.post .footer {
+	margin: 0 0 25px 0;
+	padding: 5px 10px 4px 10px;
+	border-top: 1px solid #f0f0f0;
+	border-bottom: 1px solid #f0f0f0;
+	font-size: 11px;
+	color: #636363;
+}
+.post .footer span {
+	margin: 0 10px 0 0;
+}
+.f-pager:last-child {
+	margin: -10px 0 0 0;
+}
+
+.f-pager a:hover {
+	color: #9bb2d2;
+}
