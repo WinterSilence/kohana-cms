@@ -1,0 +1,36 @@
+{if isset($posts)}
+{foreach $posts as $post}
+<div class="post">
+	<h3 class="header">
+		<a href="{$post.url}">{$post.name}</a>
+	</h3>
+	<div class="f-bwi content">
+		{if isset($post.picture)}<img class="f-bwi-pic" src="{$post.picture}" alt="{$post.name}">{/if}
+		{$post.content}
+		<a class="show" href="{$post.url}">{'Read more'|i18n} »</a>
+	</div>
+	<div class="footer">
+		<span class="date">{'Published in'|i18n}: {$post.date_update}</span>
+		<span class="categories">
+			{'Categories'|i18n}: 
+			{foreach $post.categories as $category}
+			<a href="{$category.url}">{$category.name}</a>, 
+			{/foreach}
+		</span>
+		<span class="tags">
+			{'Tags'|i18n}: 
+			{foreach $post.tags as $tag}
+			<a href="{$tag.url}">{$tag.name}</a>, 
+			{/foreach}
+		</span>
+	</div>
+</div>
+{/foreach}
+
+{widget name="pagination"}
+
+{else}
+
+<h4>{'Empty'|i18n}</h4>
+
+{/if}

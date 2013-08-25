@@ -1,0 +1,65 @@
+<div class="g">
+	<div class="g-row">
+		<header>
+		
+			<div class="f-nav-bar">
+				<div class="f-nav-bar-body">
+					{snippet name="logo"}
+					<ul class="f-nav">
+						<li><a href="/info/page/about_us/">О нас</a></li>
+						<li>
+							<a href="/info/page/services/">Услуги</a>
+							<ul class="f-nav-list f-nav-tabs">
+								<li><a href="/info/page/turnkey_site/">Сайт "под ключ"</a></li>
+								<li><a href="/info/page/rework_ready_site/">Доработка готового сайта</a></li>
+								<li><a href="/info/page/creation_and_layout_design/">Создание и вёрстка дизайна</a></li>
+							</ul>
+						</li>
+						<li>
+							<a href="/info/page/turnkey_solutions/">Готовые решения</a>
+							<ul class="f-nav-list f-nav-tabs">
+								<li><a href="/info/page/webasyst_solutions/">WebAsyst Shop-Script</a></li>
+								<li><a href="/info/page/kohana_solutions/">Kohana framework</a></li>
+								<li><a href="/info/page/no_category_solutions/">Разное</a></li>
+							</ul>
+						</li>
+						<li>
+							<a href="/info/page/portfolio/">Портфолио</a>
+						</li>
+						<li>
+							<a href="/blog/">Блог</a>
+						</li>
+					</ul>
+					{snippet name="contacts"}
+				</div>
+			</div>
+			
+		</header>
+	</div>
+	
+	<div class="g-row" id="content">
+		<article class="g-9">
+			{$content|default:''}
+			{snippet name="debug"}
+		</article>
+		<aside class="g-3">
+			<div id="sidebar">
+				<h4 class="header">Категории:</h4>
+				<ul class="f-nav-list f-nav-tabs">
+					<li><a href="#">Своя CMS на Kohana</a></li>
+					<li><a href="#">Kohana</a></li>
+					<li><a href="#">PHP</a></li>
+					<li><a href="#">Jquery</a></li>
+					<li><a href="#">HTML & CSS</a></li>
+					<li><a href="#">Базы данных</a></li>
+					<li><a href="#">IT новости</a></li>
+					<li><a href="#">SEO</a></li>
+					<li><a href="#">Вне сети</a></li>
+				</ul>
+				{widget name="tagcloud" items="20"}
+			</div>
+		</aside>
+	</div>
+	<div class="g-row">
+		{snippet name="footer"}
+	</div>

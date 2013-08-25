@@ -1,0 +1,29 @@
+{if isset($post)}
+<div class="post">
+	<h3 class="header">{$post->name}</h3>
+	<div class="f-bwi content">
+		{if isset($post->picture)}<img class="f-bwi-pic" src="{$post->picture}" alt="{$post->name}">{/if}
+		{$post->content}
+	</div>
+	<div class="footer">
+		<span class="date">{'Published'|i18n}: {$post->date_add}</span>
+		{if count($post_categories)}
+		<span class="categories">
+			{'Categories'|i18n}: 
+			{foreach $post_categories as $category}
+			<a href="{$category->url}">{$category->name}</a>, 
+			{/foreach}
+		</span>
+		{/if}
+		{if count($post_tags)}
+		<span class="tags">
+			{'Tags'|i18n}: 
+			{foreach $post_tags as $tag}
+			<a href="{$tag->id}">{$tag->name}</a>, 
+			{/foreach}
+		</span>
+		{/if}
+	</div>
+</div>
+{snippet name="comments"}
+{/if}

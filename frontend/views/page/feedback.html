@@ -1,0 +1,59 @@
+<form class="f-horizontal" action="{''|url}" method="post">
+	
+	<input type="hidden" name="csrf" value="{Security::token()}">
+	
+	{if is_string(Message::get())}
+	<div class="f-message f-message-{Message::type()}">
+		<span class="close"></span>
+		<strong>{Message::type()|i18n}</strong> {Message::get()}
+	</div>
+	{/if}
+	
+	<fieldset>
+		
+		<legend>{'Feedback'|i18n}</legend>
+		
+		{if isset($user)}
+		<input type="hidden" name="email" value="{$user->email|escape}">
+		{else}
+		<div class="f-row">
+			<label for="email">{'Email'|i18n}:</label>
+			<div class="f-input {if Message::get('email')}f-invalid{/if}">
+				<input id="email" type="email" name="email" value="{$post_data.email|default:''|escape}" class="g-8">
+				{if Message::get('email')}<span class="f-input-comment">{Message::get('email')}</span>{/if}
+			</div>
+		</div>
+		{/if}
+		
+		<div class="f-row">
+			<label for="title">{'Title'|i18n}:</label>
+			<div class="f-input {if Message::get('title')}f-invalid{/if}">
+				<input id="title" type="text" name="title" value="{$post_data.title|default:''|escape}" class="g-8">
+				{if Message::get('title')}<span class="f-input-comment">{Message::get('title')}</span>{/if}
+			</div>
+		</div>
+		
+		<div class="f-row">
+			<label for="message">{'Message'|i18n}:</label>
+			<div class="f-input {if Message::get('message')}f-invalid{/if}">
+				<textarea id="message" class="g-8" rows="4" cols="50">{$post_data.message|escape}</textarea>
+				{if Message::get('message')}<span class="f-input-comment">{Message::get('message')}</span>{/if}
+			</div>
+		</div>
+		
+		<div class="f-row">
+			<label for="captcha"></label>
+			<div class="f-input {if Message::get('captcha')}f-invalid{/if}">
+				<img class="wa-captcha-img" src="{'route:captcha'|url}" alt="{'Captcha'|i18n}">
+				<input id="captcha" type="text" name="captcha" value="{$post_data.title|default:''|escape}" class="g-2">
+				{if Message::get('captcha')}<span class="f-input-comment">{Message::get('captcha')}</span>{/if}
+			</div>
+		</div>
+		
+		<div class="f-actions">
+			<button type="submit" class="f-bu" name="send">{'Send'|i18n}</button>
+		</div>
+		
+	</fieldset>
+	
+</form>
