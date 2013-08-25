@@ -1,0 +1,39 @@
+[submodule "system"]
+	path = system
+	url  = git://github.com/kohana/core.git
+	
+[submodule "modules/orm"]
+	path = modules/orm
+	url  = git://github.com/kohana/orm.git
+	
+[submodule "modules/image"]
+	path = modules/image
+	url  = git://github.com/kohana/image.git
+	
+[submodule "modules/database"]
+	path = modules/database
+	url  = git://github.com/kohana/database.git
+	
+[submodule "modules/cache"]
+	path = modules/cache
+	url  = git://github.com/kohana/cache.git
+	
+[submodule "modules/auth"]
+	path = modules/auth
+	url  = git://github.com/kohana/auth.git
+	
+[submodule "modules/message"]
+	path = modules/message
+	url  = git://github.com/WinterSilence/kohana-message.git
+	
+[submodule "modules/gravatar"]
+	path = modules/gravatar
+	url  = git://github.com/WinterSilence/kohana-gravatar.git
+	
+[submodule "modules/email"]
+	path = modules/email 
+	url  = git://github.com/leemo/kohana-swift-mailer.git
+	
+[submodule "modules/captcha"]
+	path = modules/captcha
+	url  = git://github.com/WinterSilence/kohana-captcha.git
