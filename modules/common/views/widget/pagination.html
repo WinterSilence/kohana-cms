@@ -1,0 +1,21 @@
+{if isset($paginate)}
+<div class="f-pager">
+	<ul>
+		<li class="f-pager-prev {if $paginate.current == 1}disabled{/if}">
+			<a href="{"page:`$paginate.prev`,total:`$paginate.total`"|url}">&#10094; {'Previous'|i18n}</a>
+		</li>
+		{for $page=1 to $paginate.total}
+		{if $paginate.current == $page}
+		<li class="active"><strong>{$page}</strong></li>
+		{/else}
+		<li>
+			<a href="{"page:`$page`,total:`$total`"|url}">{$page}</a>
+		</li>
+		{/if}
+		{/for}
+		<li class="f-pager-next {if $paginate.current == $paginate.total}disabled{/if}">
+			<a href="{"page:`$paginate.next`,total:`$paginate.total`"|url}">{'Next'|i18n} &#10095;</a>
+		</li>
+	</ul>
+</div> 
+{/if}

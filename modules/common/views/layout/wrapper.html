@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="lt-ie9 lt-ie8 lt-ie7" lang="{I18n::lang()}"><![endif]-->
+<!--[if IE 7]><html class="lt-ie9 lt-ie8" lang="{I18n::lang()}"><![endif]-->
+<!--[if IE 8]><html class="lt-ie9" lang="{I18n::lang()}"><![endif]-->
+<!--[if gt IE 8]><!--><html lang="{I18n::lang()}"><!--<![endif]-->
+<head>
+	<base href="{URL::base()}">
+	
+{foreach $config.meta_tags as $name => $attributes}
+	{HTML::meta($name, $attributes)}
+{/foreach}
+	
+	{Assets::get('css')}
+	
+	{Assets::get('js')}
+	
+	<!--[if lt IE 9]>
+	<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+</head>
+<body id="{$smarty.const.APP}">
+	{$content|default:''}
+</body>
+</html>

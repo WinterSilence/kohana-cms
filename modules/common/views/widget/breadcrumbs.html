@@ -1,0 +1,13 @@
+{if isset($breadcrumbs)}
+<ul class="f-breadcrumbs">
+{foreach $breadcrumbs as $url => $name}
+	{if ! $name@last}
+	<li class="{if $name@first}first{/if}">
+		<a href="{$url|url}">{$name}</a>
+	</li> 
+	{else}
+	<li class="cur">{$name}</li> 
+	{/if}
+{/foreach}
+</ul>
+{/if}
