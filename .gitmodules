@@ -40,7 +40,7 @@
 	
 [submodule "modules/assets"]
 	path = modules/assets
-	url  = https://github.com/WinterSilence/kohana-assets.git
+	url = https://github.com/WinterSilence/kohana-assets.git
 	
 [submodule "modules/gravatar"]
 	path = modules/gravatar
