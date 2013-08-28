@@ -45,3 +45,6 @@
 [submodule "modules/gravatar"]
 	path = modules/gravatar
 	url  = https://github.com/WinterSilence/kohana-gravatar.git
+[submodule "common/vendor/smarty"]
+	path = common/vendor/smarty
+	url = https://github.com/opensolutions/smarty.git
