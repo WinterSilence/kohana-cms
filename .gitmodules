@@ -45,3 +45,6 @@
 [submodule "common/vendor/smarty"]
 	path = common/vendor/smarty
 	url = https://github.com/opensolutions/smarty.git
+[submodule "modules/assets"]
+	path = modules/assets
+	url = https://github.com/WinterSilence/kohana-assets
