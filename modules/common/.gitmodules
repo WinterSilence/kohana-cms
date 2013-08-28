@@ -1,0 +1,4 @@
+[submodule "vendor/smarty"]
+	path = vendor/smarty
+	url = https://github.com/opensolutions/smarty.git
+
