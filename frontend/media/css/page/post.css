@@ -1,0 +1,7 @@
+.f-pager:last-child {
+	margin: -10px 0 0 0;
+}
+
+.f-pager a:hover {
+	color: #9bb2d2;
+}

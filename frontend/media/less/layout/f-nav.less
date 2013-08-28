@@ -1,0 +1,189 @@
+// Horizontal navigation
+// ---------------------------------------
+.f-nav {
+	.clearfix;
+	margin: 0 0 @bottom_spacing 0;
+	position: relative;
+
+	> li {
+		float: left;
+		list-style: none;
+		margin: 0 @line_height 0 0;
+		position: relative;
+		
+		> a {
+			display: block;
+			line-height: @nav_height;
+			text-decoration: none;
+
+			&:hover {
+				color: @nav_hover_color;
+			}
+		}
+	}
+	> .active > {
+		a,
+		a:hover {
+			color: @nav_active_color;
+		}
+	}
+}
+
+// Tabs navigation
+// ---------------------------------------
+.f-nav-tabs {
+	border-bottom: 1px solid @nav_border_color;
+
+	> li {
+		margin: 0 @bottom_spacing/2 -1px 0;
+
+		> a {
+			.border-radius(@border_radius @border_radius 0 0);
+			border-bottom: 1px solid transparent;
+			padding: 1px 10px 0;
+			
+			&:hover {
+				background: @nav_hover_bg;
+				border-color: @nav_border_color;
+			}
+		}
+	}
+	> .active > {
+		a,
+		a:hover {
+			background: @nav_active_bg;
+			border: 1px solid @nav_border_color;
+			border-bottom: 1px solid @nav_active_bg;
+			padding: 0 10px;
+		}
+	}
+}
+
+// Vertical navigation
+// ---------------------------------------
+.f-nav-list {
+	margin: 0 0 @bottom_spacing 0;
+
+	> li {
+		float: none;
+		list-style: none;
+		margin: 0;
+
+		> a {
+			display: block;
+			line-height: @nav_height;
+			padding: 0 11px;
+			text-decoration: none;
+			
+			&:hover {
+				color: @nav_hover_color;
+			}
+		}
+	}
+	> .active > {
+		a,
+		a:hover {
+			color: @nav_active_color;
+		}
+	}
+}
+
+// Vertical tabs navigation
+// ---------------------------------------
+.f-nav-list.f-nav-tabs {
+	border-bottom: none;
+
+	> .active > a,
+	> .active > a:hover,
+	> li > a {
+		.border-radius(0);
+		border: 1px solid @nav_border_color;
+		padding: 0 10px;
+	}
+
+	> .active > a,
+	> .active > a:hover,
+	> li + li > a {
+		border-top: none;
+	}
+
+	> li:first-child > a {
+		.border-radius(@border_radius @border_radius 0 0);
+	}
+	> li:last-child > a {
+		.border-radius(0 0 @border_radius @border_radius);
+	}
+}
+
+// Navigation bar
+// ---------------------------------------
+.f-nav-bar {
+	#gradient > .vertical(lighten(@nav_bar_bg, 5%), darken(@nav_bar_bg, 10%));
+	.border-radius;
+	.box-shadow;
+	border: 1px solid darken(@nav_bar_bg, 5%);
+	color: @nav_bar_text_color;
+	position: relative;
+	z-index: @z_ndex_nav_bar;
+
+	.f-nav-bar-body {
+		.box-sizing;
+		.clearfix;
+		.gridRow(12);
+		height: @nav_bar_height;
+		line-height: @nav_bar_height;
+		margin: auto;
+	}
+	.f-nav {
+		float: left;
+		margin: 0;
+
+		> li {
+			margin: 0;
+
+			> a {
+				color: @nav_bar_text_color;
+				line-height: @nav_bar_height;
+				padding: 0 10px;
+				text-shadow: -1px -1px 0 @nav_bar_text_color_shadow;
+			}
+		}
+		> li > a:hover,
+		> .active > a {
+			color: @nav_bar_text_color_active;
+			text-shadow: 1px 1px 0 @nav_bar_text_color_shadow_active;
+		}
+	}
+	.f-nav-right {
+		float: right;
+	}
+}
+
+.f-nav-bar-title {
+	color: @nav_bar_text_color_active;
+	float: left;
+	font-size: @nav_bar_title_text_size;
+	line-height: @nav_bar_height - 3;
+	padding: 0 15px;
+	text-shadow: 1px 1px 1px @nav_bar_text_color_shadow_active;
+
+	a {
+		color: @nav_bar_text_color_active;
+		text-decoration: none;
+	}
+}
+
+// Top fixed navigation bar
+// ---------------------------------------
+.f-nav-bar-fixed {
+	.border-radius(0);
+	left: 0;
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: @z_ndex_nav_bar;
+
+	.f-nav-bar-title {
+		padding-left: 0;
+	}
+}

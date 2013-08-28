@@ -1,0 +1,17 @@
+.category > .content,
+.category > .content p,
+.category > .content dd,
+.category > .content li,
+.category > .content div,
+.category > .content td {
+	text-align: justify;
+}
+.category > .content p,
+.category > .content div {
+	margin-bottom: 5px;
+}
+.category > .content {
+	font-size: 12px;
+	border-bottom: 1px solid #f0f0f0;
+	padding: 0 0 12px 0;
+}

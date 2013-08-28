@@ -1,0 +1,43 @@
+// Columns System
+// ---------------------------------------
+.f-column {
+	.box-sizing;
+	float: left;
+	padding-left: @grid_gutter_width/2;
+
+	&:first-child {
+		padding-left: 0;
+		padding-right: @grid_gutter_width/2;
+	}
+}
+.f-col-2,
+.f-col-3,
+.f-col-4 {
+	.clearfix;
+}
+.f-col-4 .f-column,
+.f-col-3 .f-column .f-column,
+.f-col-2 .f-column {
+	width: 50%;
+}
+.f-col-3 > .f-column:first-child {
+	width: 67%;
+}
+.f-col-3 > .f-column {
+	width: 33%;
+}
+
+.lt-ie8 {
+	.f-column {
+		padding: 0;
+	}
+	.f-column > * {
+		margin-left: @grid_gutter_width/2;
+	}
+	.f-column:first-child > * {
+		margin-right: @grid_gutter_width/2; margin-left: 0;
+	}
+	.f-column .f-column {
+		margin: 0;
+	}
+}
