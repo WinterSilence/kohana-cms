@@ -1,7 +1,0 @@
-media/*/assets/
-^media/*/assets/.*
-*/logs/
-*/cache/.*
-*/cache/
-*.log
-*~
