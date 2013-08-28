@@ -307,7 +307,12 @@ AddCharset utf-8 .atom .css .less .js .json .rss .vtt .xml .txt
 </Files>
 
 # Protect application and system files from being viewed
-RewriteRule ^(?:frontend|backend|modules|system|vendor)\b.* index.php/$0 [L]
+RewriteRule ^(?:frontend|backend|cli|common|modules|system|vendor)\b.* index.php/$0 [L]
+
+# Command Line Interface
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^cli/(.*) console.php/$1 [PT]
 
 # Back-end 
 RewriteCond %{REQUEST_FILENAME} !-f
