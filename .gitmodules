@@ -45,4 +45,3 @@
 [submodule "modules/gravatar"]
 	path = modules/gravatar
 	url  = https://github.com/WinterSilence/kohana-gravatar.git
-
