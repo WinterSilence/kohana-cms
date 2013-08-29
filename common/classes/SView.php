@@ -36,21 +36,27 @@ class SView extends Kohana_View
 
 	/**
 	 * Instance Smarty object
-	 *
-	 * @return  Smarty
+	 * 
+	 * @static 
+	 * @return Smarty
 	 */
 	public static function smarty()
 	{
 		if ( ! self::$_smarty)
 		{
-			// Конфигурация
-			if ($config = Kohana::$config->load('smarty')->as_array())
+			// Load configuration
+			if ( ! $config = Kohana::$config->load('smarty')->as_array())
 			{
-				self::extension($config['extension']);
-			};
-			// Создание объекта
+				throw new View_Exception('Smarty configuration file not found');
+			}
+			
+			// Create Smarty object
 			$smarty = (isset($config['class']) ? new $config['class'] : new Smarty);
-			// Конфигурирование объекта
+			
+			// Set extension
+			self::extension($config['extension']);
+			
+			// Sets Smarty configuration
 			foreach ($config as $key => $value)
 			{
 				$method = Inflector::camelize('set '.$key);
@@ -63,6 +69,7 @@ class SView extends Kohana_View
 					$smarty->$key = $value;
 				}
 			}
+			
 			self::$_smarty = $smarty;
 		}
 		return self::$_smarty;

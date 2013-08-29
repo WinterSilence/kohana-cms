@@ -9,10 +9,10 @@ Kohana::modules(array(
 	'auth'		=> MODPATH.'auth',		// Basic authentication
 	'database'	=> MODPATH.'database',	// Database access
 	'orm'		=> MODPATH.'orm',		// Object Relationship Mapping
-	//'mptt'		=> MODPATH.'mptt',		// ORM nested sets tree
 	'image'		=> MODPATH.'image',		// Image manipulation
-	'message'	=> MODPATH.'message',	// Sending flash messages
-	'captcha'	=> MODPATH.'captcha',	// Anti Spam Picure
+	//'mptt'		=> MODPATH.'mptt',		// ORM nested sets trees
+	'captcha'	=> MODPATH.'captcha',	// AntiSpam Picure
+	'message'	=> MODPATH.'message',	// Sending flash\short messages
 	'email'		=> MODPATH.'email',		// Sends e-mail (based on SwiftMail)
 	'assets'	=> MODPATH.'assets',	// Assets manager for CSS\LESS\JS files
 ));
@@ -45,4 +45,3 @@ if (function_exists('apc_store') AND ini_get('apc.enabled'))
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.
  */
- 

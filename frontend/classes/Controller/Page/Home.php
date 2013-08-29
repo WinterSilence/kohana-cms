@@ -1,5 +1,11 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
-
+/**
+ * Frontend home page
+ *
+ * @package   CMS/Frontend
+ * @category  Controller
+ * @author    WinterSilence
+ */ 
 class Controller_Page_Home extends Controller_Page
 {
 	/**
@@ -10,6 +16,6 @@ class Controller_Page_Home extends Controller_Page
 	
 	public function action_index()
 	{
-		//$this->response->body('hello, world!');
+		//var_export(Route::get('widget')->matches(Request::factory('widget/blog/tags')));
 	}
 } // End Controller_Page_Home

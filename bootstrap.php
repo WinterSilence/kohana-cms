@@ -10,10 +10,10 @@ if (is_file(APPPATH.'classes/Kohana'.EXT))
 	// Application extends the core
 	require_once APPPATH.'classes/Kohana'.EXT;
 }
-elseif(is_file(MODPATH.'common/classes/Kohana'.EXT))
+elseif(is_file(DOCROOT.'common/classes/Kohana'.EXT))
 {
 	// Common module extends the core
-	require_once MODPATH.'common/classes/Kohana'.EXT;
+	require_once DOCROOT.'common/classes/Kohana'.EXT;
 }
 else
 {
@@ -125,9 +125,80 @@ Encrypt::$default = $bootstrap['encrypt'];
 // Clean up the bootstrap config array
 unset($bootstrap);
 
-// Add routes add before this string !!!
+/**
+ * Set the routes. Each route must have a minimum of a name, a URI and a set of
+ * defaults for the URI.
+ */
 if ( ! Route::cache())
 {
+	Route::set('ajax', 'ajax/<controller>(/<action>(/<data_type>))', array(
+			'data_type'  => '(html|json|xml)',
+		))
+		->defaults(array(
+			'directory'  => 'Ajax',
+			'controller' => '',
+			'action'     => 'index',
+			'data_type'  => 'json',
+		));
+	
+	Route::set('widget', 'widget/<directory>(/<controller>)', array(
+			'directory'  => '[\w\-]+',
+			'controller'  => '[\w\-]*',
+		))
+		->defaults(array(
+			'directory'  => 'Widget',
+			'controller' => '',
+			'action'     => 'index',
+		))
+		->filter(function(Route $route, $params, Request $request)
+		{
+			if (empty($params['controller']))
+			{
+				$params['controller'] = $params['directory'];
+				$params['directory'] = 'Widget';
+			}
+			else
+			{
+				$params['directory'] = 'Widget/'.$params['directory'];
+			}
+			return $params;
+		});
+	
+	Route::set('list', '<controller>/list(/<page>(-<total>(/<order>(/<direction>))))', array(
+			'page'       => '[0-9]+',
+			'total'      => '[0-9]+',
+			'order'      => '[\w\-]+',
+			'direction'  => '(asc|desc)',
+		))
+		->defaults(array(
+			'directory'  => 'Page',
+			'controller' => '',
+			'action'     => 'list',
+			'page'       => '1',
+			'total'      => '0',
+			'order'      => 'id',
+			'direction'  => 'asc',
+		));
+	/*
+	Route::set('default_dir', '(<controller>(/<action>(/<id>)))', array(
+			'id' => '[\w\-]+',
+		))
+		->defaults(array(
+			'directory'  => 'Page',
+			'controller' => 'Home',
+			'action'     => 'index',
+		));
+	*/
+	Route::set('default', '(<controller>(/<action>(/<id>)))', array(
+			'id' => '[\w\-]+',
+			//'slug' => '[\w\-]+',
+		))
+		->defaults(array(
+			'directory'  => 'Page',
+			'controller' => 'Home',
+			'action'     => 'index',
+		));
+	
 	// Set routes cache
 	Route::cache(Kohana::$caching);
 }

@@ -9,14 +9,21 @@
 {foreach $config.meta_tags as $name => $attributes}
 	{HTML::meta($name, $attributes)}
 {/foreach}
+
+	<link rel="shortcut icon" type="image/png" href="{CMS::URL_IMG}favicon.ico" />
 	
 	{Assets::get('css')}
-	
-	{Assets::get('js')}
 	
 	<!--[if lt IE 9]>
 	<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
+	
+	<script type="text/javascript">
+		var URL_IMG = '{CMS::URL_IMG}';
+		{* var BROWSER = '{$user_agent.browser}'; *}
+	</script>
+	
+	{Assets::get('js')}
 </head>
 <body id="{$smarty.const.APP}">
 	{$content|default:''}

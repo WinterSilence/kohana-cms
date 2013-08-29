@@ -8,12 +8,6 @@
  */ 
 class Controller_Page_Feedback extends Controller_Page
 {
-	/**
-	 * Content template
-	 * @var mixed(string|View)
-	 */
-	public $content = 'page/feedback';
-
 	public function action_index()
 	{
 		if ($this->post())
@@ -27,8 +21,7 @@ class Controller_Page_Feedback extends Controller_Page
 				// Send success message
 				Message::success('Feedback message sent', TRUE);
 				// Redirect for clear post data
-				// $this->redirect($this->request->url());
-				$this->redirect();
+				$this->redirect($this->request->url());
 			}
 			else
 			{

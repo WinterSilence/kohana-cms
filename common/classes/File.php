@@ -40,7 +40,10 @@ class File extends Kohana_File
 			// Delete empty elements from varible
 			if ($delete_empty AND is_array($var))
 			{
-				$var = array_filter($var);
+				foreach ($var as $key => $value)
+				{
+					$var[$key] = array_filter($value);
+				}
 			}
 			// File content 
 			$content = Kohana::FILE_SECURITY.PHP_EOL.'return '.var_export($var, TRUE).';';

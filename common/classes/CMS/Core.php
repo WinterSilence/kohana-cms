@@ -8,6 +8,41 @@
  */ 
 abstract class CMS_Core
 {
+	// Public directory with images
+	const URL_IMG = '/assets/img/';
+
+	/**
+	 * Create identification tag(id) from the methods attributes.
+	 * Basically used for get or set cache.
+	 * 
+	 * @static
+	 * @return  string
+	 */
+	public static function tag()
+	{
+		return I18n::lang().'_'.sha1(serialize(func_get_args()));
+	}
+
+	/**
+	 * Return list of controller actions, `actions_` part is cut off.
+	 * 
+	 * @static
+	 * @param  mixed  $class  The class name or an object instance
+	 * @return array
+	 */
+	public static function actions($class)
+	{
+		$actions = array();
+		foreach ( (array) get_class_methods($class) as $method)
+		{
+			if (substr($method, 0, 7) === 'action_')
+			{
+				$actions[] = substr($method, 7);
+			}
+		}
+		return $actions;
+	}
+
 	/**
 	 * Create URL based on route. This is a shortcut for: Route::url. URL cached.
 	 * 
@@ -23,22 +58,23 @@ abstract class CMS_Core
 	 * @param   mixed    $protocol     Protocol string or boolean, adds protocol and domain
 	 * @return  string
 	 * @uses    Request, Route, HTML, Text, UTF8
-	 * @throws  Kohana_Exception
+	 * @uses    CMS::tag
+	 * @throws  CMS_Exception
 	 */
 	public static function url($params_str, $escape_html = TRUE, $lower_case = TRUE, $protocol = NULL)
 	{
 		if (empty($params_str))
 		{
 			// Get current page URL
-			$url = Request::current()->url($protocol);
+			$url = Request::initial()->url($protocol);
 		}
 		else
 		{
-			// Try load URL from cache
 			if (Kohana::$caching)
 			{
-				$tag = 'url:'.$params_str.':'.$escape_html.':'.$lower_case.':'.$protocol;
-				
+				// Cache tag(id)
+				$tag = CMS::tag('url', $params_str, $escape_html, $lower_case, $protocol);
+				// Try load URL from cache
 				if ($url = Kohana::cache($tag))
 				{
 					return (string) $url;
@@ -71,7 +107,7 @@ abstract class CMS_Core
 			else
 			{
 				// Use links in format: 'option:value,option2:value2'
-				throw new Kohana_Exception('Wrong url format: :url', array(':url' => $params_str));
+				throw new CMS_Exception('Wrong url format: :url', array(':url' => $params_str));
 			}
 		}
 		
@@ -88,7 +124,7 @@ abstract class CMS_Core
 		*/
 		
 		// Save result URL in cache
-		if ($params_str AND Kohana::$caching)
+		if ( ! empty($params_str) AND Kohana::$caching)
 		{
 			Kohana::cache($tag, $url, Date::DAY);
 		}
@@ -99,12 +135,12 @@ abstract class CMS_Core
 	/**
 	 * Generate path for controllers and models
 	 *
-	 * @param  mixed   $class      Object or class name
-	 * @param  mixed   $action     Controller action
-	 * @param  string  $separator  Directory separator
+	 * @param  mixed   $class   Object or class name
+	 * @param  mixed   $action  Controller action
+	 * @param  string  $sep     Use as word separator
 	 * @return string
 	 */
-	public static function path($class, $action = NULL, $separator = DS)
+	public static function path($class, $action = FALSE, $sep = DS)
 	{
 		if ($class instanceof Controller)
 		{
@@ -112,7 +148,7 @@ abstract class CMS_Core
 		}
 		elseif ($class instanceof Request)
 		{
-			$name = ltrim($class->directory().$separator.$class->controller(), $separator);
+			$name = ltrim($class->directory().$sep.$class->controller(), $sep);
 		}
 		elseif (is_object($class))
 		{
@@ -123,11 +159,11 @@ abstract class CMS_Core
 			$name = (string) $class;
 		}
 		
-		$name = str_replace('_', $separator, $name);
+		$name = str_replace('_', $sep, $name);
 		
-		if ( ! empty($action))
+		if ($action)
 		{
-			$name .= $separator.(($class instanceof Request) ? $class->action() : $action);
+			$name .= $sep.($class instanceof Request ? $class->action() : $action);
 		}
 		
 		return strtolower($name);
@@ -136,60 +172,98 @@ abstract class CMS_Core
 	/**
 	 * Wrapper for request to widget controller
 	 * 
-	 * @param   string  $uri           Request uri(widget name)
-	 * @param   mixed   $data          Send data
-	 * @param   string  $method        Request method
-	 * @param   boolean $auto_render   Execute request and return body?
+	 * @param   string  $name    Request uri(widget name)
+	 * @param   mixed   $data    Send data
+	 * @param   string  $method  Request method
 	 * @return  mixed
 	 * @uses    Request::factory
 	 * @uses    HTML::chars
-	 * @throws  Request_Exception
+	 * @throws  CMS_Exception
 	 */
-	public static function widget($uri, array $data = NULL, $method = Request::GET, $auto_render = TRUE)
+	public static function widget($name, array $data = NULL, $method = Request::GET)
 	{
-		$uri = str_replace(array(' ', '_'), '/', $uri);
-		// Create request
-		if ( ! $widget = Request::factory('widget/'.$uri))
+		// Convert name in valid uri format
+		$name = str_replace(array(' ', '_', '\\'), '/', $name);
+		
+		// Create request object
+		if ( ! $widget = Request::factory('widget/'.$name))
 		{
-			throw new Request_Exception('Request to widget :uri failed', array(':uri' => $uri));
+			throw new CMS_Exception('Widget :name: request failed', array(':name' => $name));
 		}
-		// Set data
+		
+		// Set request data
 		switch ($method)
 		{
 			case Request::GET:
 				$widget->query($data);
 				break;
+			
 			case Request::POST:
 				$widget->post($data);
 				break;
+			
 			default:
-				throw new Request_Exception('Unknown method :method of widget :uri', 
-					array(':method' => $method, ':uri' => $uri));
+				throw new CMS_Exception('Widget :name: invalid method :method', array(
+					':method' => $method, 
+					':name'   => $name,
+				));
 		}
-		// Set data sending method
-		$widget->method($method);
-		// Return request body or object
-		return ($auto_render ? $widget->execute()->body() : $widget);
+		
+		// Return rendered request content
+		return $widget->method($method)->execute()->body();
 	}
 
 	/**
-	 * Wrapper for work with small Views aka snippets
+	 * Wrapper for work with easy Views aka snippets
 	 *
-	 * @param   string   $uri          View uri(snippet name)
-	 * @param   mixed    $data         View variables
-	 * @param   boolean  $auto_render  Return render View?
-	 * @return  mixed   
+	 * @param   string  $name  Path to snippet View file
+	 * @param   mixed   $data  View variables
+	 * @return  string
 	 * @uses    SView::factory
-	 * @throws  View_Exception
+	 * @uses    Kohana::find_file
+	 * @uses    Assets::instance
+	 * @throws  CMS_Exception
 	 */
-	public static function snippet($uri, array $data = NULL, $auto_render = TRUE)
+	public static function snippet($name, array $data = NULL)
 	{
-		$uri = str_replace(array(' ', '_'), '/', $uri);
-		if ( ! $snippet = SView::factory('snippet'.DS.$uri, $data))
+		// Convert name in path
+		$name = 'snippet'.DS.str_replace(array(' ', '_', '\\'), DS, trim($name, '/\\'));
+		
+		// TODO: fix path's
+		// Add assets JS\CSS files
+		if (class_exists('Assets'))
 		{
-			throw new View_Exception('Snippet :uri not found', array(':uri' => $uri));
+			if (Kohana::find_file('media', 'css'.DS.$name, 'css'))
+			{
+				Assets::instance()->set('css', $name.'.css');
+			}
+			if (Kohana::find_file('media', 'js'.DS.$name, 'js'))
+			{
+				Assets::instance()->set('js', $name.'.js');
+			}
 		}
-		return ($auto_render ? $snippet->render() : $snippet);
+		if (Kohana::$caching)
+		{
+			// Cache tag(id) for find
+			$tag = CMS::tag('snippet', $name, I18n::lang(), $data);
+			
+			// Try load from cache
+			if ($snippet = Kohana::cache($tag))
+			{
+				return $snippet;
+			}
+		}
+		// Create and render
+		if ( ! $snippet = SView::factory($name, $data)->render())
+		{
+			throw new CMS_Exception('Snippet :name: error at create', array(':name' => $name));
+		}
+		elseif (Kohana::$caching)
+		{
+			// Save content in cache
+			Kohana::cache($tag, $snippet, Date::DAY);
+		}
+		return $snippet;
 	}
 
 	/**
@@ -200,7 +274,7 @@ abstract class CMS_Core
 	 * @param   string  $from  Data type
 	 * @return  mixed
 	 * @uses    XML
-	 * @throws  Kohana_Exception
+	 * @throws  CMS_Exception
 	 */
 	public static function convert($data, $to = 'json', $from = NULL)
 	{
@@ -209,54 +283,43 @@ abstract class CMS_Core
 		{
 			return $data;
 		}
+		
 		// Auto detect type
-		if (empty($from))
-		{
-			$from = gettype($data);
-		}
-		// Conversion
+		$from = (is_null($from) ? gettype($data) : $from);
+		
+		// Converting data
 		switch ($from.'_'.$to)
 		{
-			// Convert in text
-			case 'string_text':
-				return strip_tags($data);
-			case 'array_text':
-				return strip_tags(implode($data));
-			case 'object_text':
-				return (strip_tags(var_export($data, TRUE)));
-			// Convert in HTML
-			case 'string_html':
-				return $data;
+			// Convert .. in HTML/string
 			case 'array_html':
-				return implode($data);
+			case 'array_string':
+				return implode(PHP_EOL, $data);
 			case 'object_html':
 				return var_export($data, TRUE);
-			// Convert in JSON
+			// Convert .. in JSON
 			case 'string_json':
 			case 'array_json':
 			case 'object_json':
 				return json_encode($data);
-			// Convert in XML
+			// Convert .. in XML
 			case 'string_xml':
 				return simplexml_load_string($data);
 			case 'array_xml':
 				return (new XML)->from_array($data);
 			case 'object_xml':
 				return simplexml_load_string(var_export($data, TRUE));
-			// Convert in JSON
+			// Convert XML in ..
 			case 'xml_array':
 				return (new XML)->as_array($data);
 			case 'xml_string':
-			case 'xml_text':
 			case 'xml_html':
 				return var_export($data, TRUE);
-			// Convert in array
-			case 'xml_array':
-				return (new XML)->as_array($data);
-			// Error - unable to convert
+			// Error: unable to convert
 			default:
-				throw new Kohana_Exception('Convert error :from -> :to', 
-					array(':from' => $from, ':to' => $to));
+				throw new CMS_Exception('Convert error: from :from to :to', array(
+					':from' => $from, 
+					':to'   => $to,
+				));
 		}
 	}
 

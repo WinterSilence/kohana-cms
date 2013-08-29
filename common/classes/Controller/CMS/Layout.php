@@ -9,8 +9,14 @@
 abstract class Controller_CMS_Layout extends Controller_Basic
 {
 	/**
-	 * Content wrapper layout
-	 * @var mixed(string|View)
+	 * View auto render?
+	 * @var bool
+	 */
+	public $auto_render = TRUE;
+
+	/**
+	 * Wrapper layout for content
+	 * @var mixed
 	 */
 	public $wrapper = 'layout/wrapper';
 
@@ -21,68 +27,50 @@ abstract class Controller_CMS_Layout extends Controller_Basic
 	public $auto_cache = TRUE;
 
 	/**
-	 * Content cached?
+	 * Content loaded from cache?
 	 * @var boolean  
 	 */
-	protected $_cached = FALSE;
+	protected $_content_cached = FALSE;
 
 	/**
-	 * Controller id
+	 * Controller identification tag
 	 * @var string  
 	 */
 	protected $_tag = NULL;
 
 	/**
-	 * Automatically executed before the controller action. Can be used to set
-	 * class properties, do authorization checks, and execute other custom code.
-	 *
-	 * @return  void
+	 * Path to controller files (view, config, i18n and etc.)
+	 * @var string
 	 */
-	public function before()
-	{
-		parent::before();
-		
-		// Try load content from cache
-		if (Kohana::$caching AND $this->auto_cache)
-		{
-			$this->_tag = sha1($this->request->url());
-			
-			if ($this->content = $this->cache()->get($this->_tag))
-			{
-				$this->response->body($this->content);
-				
-				if ($this->request->is_initial())
-				{
-					$this->check_cache($this->_tag);
-				}
-				
-				$this->_cached = TRUE;
-			}
-		}
-		
-		// Set content as View
-		if ($this->auto_render AND ! $this->_cached)
-		{
-			$this->content = SView::factory($this->content);
-		}
-		
-		// TODO: fix Assets module add Config module
-		//var_export($this->config);
-		// Add assets CSS\JS files
-		$this->assets()->set('css', Arr::path($this->config, 'assets.css', array()))
-					   ->set('js', Arr::path($this->config, 'assets.js', array()));
-		unset($this->config['assets']);
-	}
+	protected $_path = NULL;
 
 	/**
-	 * Assets instance wrapper
+	 * Gets Assets manager instance 
 	 * 
-	 * @param  mixed(string|NULL) $group Group name
-	 * @return Assets
+	 * @param   string  $group  Group name
+	 * @return  Assets
 	 */
 	public function assets($group = NULL)
 	{
 		return Assets::instance($group);
+	}
+
+	/**
+	 * Issues a HTTP redirect.
+	 *
+	 * Proxies to the [HTTP::redirect] method.
+	 *
+	 * @static
+	 * @param  string  $uri   URI to redirect to
+	 * @param  int     $code  HTTP Status code to use for the redirect
+	 * @return void
+	 * @throws HTTP_Exception
+	 */
+	public static function redirect($uri = '', $code = 302)
+	{
+		$this->auto_render = FALSE;
+		
+		return parent::redirect($uri, $code);
 	}
 
 	/**
@@ -101,28 +89,173 @@ abstract class Controller_CMS_Layout extends Controller_Basic
 	 */
 	public function execute()
 	{
-		// Execute the "before action" method
-		$this->before();
-		// Call action when response content not cached
-		if ( ! $this->_cached)
+		// Determine the action to use
+		$action = 'action_'.$this->request->action();
+		// If the action doesn't exist, it's a 404
+		if ( ! method_exists($this, $action))
 		{
-			// Determine the action to use
-			$action = 'action_'.$this->request->action();
-			// If the action doesn't exist, it's a 404
-			if ( ! method_exists($this, $action))
-			{
-				throw HTTP_Exception::factory(404,
-					'The requested URL :uri was not found on this server.',
-					array(':uri' => $this->request->uri())
-				)->request($this->request);
-			}
+			throw HTTP_Exception::factory(404,
+				'The requested URL :uri was not found on this server.',
+				array(':uri' => $this->request->uri())
+			)->request($this->request);
+		}
+		
+		/**
+		 * Execute the "before action" method
+		 * Moved here because "virtual" actions not used in CMS
+		 */
+		$this->before();
+		
+		// Call action & after olny when response not cached
+		if ( ! $this->_content_cached)
+		{
 			// Execute the action itself
 			$this->{$action}();
+			
 			// Execute the "after action" method
 			$this->after();
 		}
+		
 		// Return the response
 		return $this->response;
+	}
+
+	/**
+	 * Load controller configuration from config parts
+	 * 
+	 * @return  void
+	 */
+	public function set_config()
+	{
+		// Add controller and action config parts
+		if (count($this->get_actions()) > 1)
+		{
+			$this->config[] = dirname($this->_path);
+		}
+		$this->config[] = $this->_path;
+		
+		parent::set_config();
+	}
+
+	/**
+	 * Searched controller content in cache.
+	 * If content is found, send it in response 
+	 * and check client browser cache.
+	 *
+	 * @return  void
+	 */
+	public function get_cached_content()
+	{
+		// Generate cache tag
+		$this->_tag = CMS::tag('controller', $this->request->url());
+		
+		// Try load content from cache
+		if ( ! $content = $this->cache()->get($this->_tag, FALSE))
+		{
+			return NULL;
+		}
+		
+		// Send cached content in response
+		$this->response->body($content);
+		
+		if ($this->request->is_initial())
+		{
+			/**
+			 * Checks the browser cache to see the response needs to be returned, 
+			 * execution will halt and a 304 Not Modified will be sent 
+			 * if the browser cache is up to date.
+			 */
+			$this->check_cache($this->_tag);
+		}
+		
+		$this->_content_cached = TRUE;
+		$this->auto_render     = FALSE;
+	}
+
+	/**
+	 * Automatically executed before the controller action. Can be used to set
+	 * class properties, do authorization checks, and execute other custom code.
+	 *
+	 * @return  void
+	 */
+	public function set_content_view()
+	{
+		if ( ! $this->content)
+		{
+			// Set auto generated path to View file
+			$this->content = $this->_path;
+		}
+		// Create content View
+		$this->content = SView::factory($this->content);
+	}
+
+	/**
+	 * Assets managment. Add CSS\JS\LESS files.
+	 *
+	 * @return  void
+	 */
+	public function set_assets()
+	{
+		// TODO: fix Assets module, add Config Manager module
+		$assets = Arr::extract($this->config['assets'], array('css', 'js'));
+		$this->assets()->set('css', $assets['css'])->set('js', $assets['js']);
+		unset($this->config['assets']);
+	}
+
+	/**
+	 * Automatically executed before the controller action. Can be used to set
+	 * class properties, do authorization checks, and execute other custom code.
+	 *
+	 * @return  void
+	 */
+	public function before()
+	{
+		// Set path to controller files
+		$this->_path = CMS::path($this->request, (count($this->get_actions()) > 1));
+		
+		/**
+		 * Controller:
+		 * 1. ---
+		 * Controller_Basic:
+		 * 1. parent::before()
+		 * 2. $this->check_auth();
+		 * 3. $this->set_config();
+		 */
+		parent::before();
+		
+		if (Kohana::$caching AND $this->auto_cache)
+		{
+			$this->get_cached_content();
+		}
+		
+		if ($this->auto_render AND ! $this->_content_cached)
+		{
+			$this->set_content_view();
+		}
+		
+		if (isset ($this->config['assets']) AND ! empty($this->config['assets']))
+		{
+			$this->set_assets();
+		}
+	}
+
+	/**
+	 *  Render content and wrap in layout 
+	 * 
+	 * @return  string
+	 */
+	public function render_content()
+	{
+		if ( ! $this->request->is_external() AND ! $this->request->is_initial())
+		{
+			// Not wrap included content (widgets)
+			return $this->content->render();
+		}
+		// Render and wrap content
+		$this->wrapper = SView::factory($this->wrapper);
+		$this->wrapper->content = $this->content->render();
+		
+		return $this->wrapper->render();
 	}
 
 	/**
@@ -136,23 +269,16 @@ abstract class Controller_CMS_Layout extends Controller_Basic
 	{
 		if ($this->auto_render)
 		{
-			if ( ! $this->content->file())
-			{
-				// Auto generate content View filename
-				$this->content->file(CMS::path($this));
-			}
-			
-			if ($this->request->is_external() OR $this->request->is_initial())
-			{
-				// Wrap content in layout
-				$this->wrapper = SView::factory($this->wrapper);
-				$this->wrapper->content = $this->content->render();
-				$this->content = $this->wrapper->render();
-				// $this->content = clone $this->wrapper;
-				unset($this->wrapper);
-			}
+			$this->content = $this->render_content();
 		}
 		
+		/**
+		 * Controller:
+		 * 1. ---
+		 * Controller_Basic:
+		 * 1. $this->set_response();
+		 * 2. parent::after();
+		 */
 		parent::after();
 		
 		if (Kohana::$caching AND $this->auto_cache)

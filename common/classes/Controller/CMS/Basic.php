@@ -10,7 +10,7 @@ abstract class Controller_CMS_Basic extends Controller
 {
 	/**
 	 * Check user auth?
-	 * @var  boolean
+	 * @var  bool
 	 */
 	public $check_auth = TRUE;
 
@@ -33,16 +33,30 @@ abstract class Controller_CMS_Basic extends Controller
 	public $headers = array();
 
 	/**
-	 * Content template
-	 * @var mixed(string|View)
+	 * Response content template
+	 * @var mixed
 	 */
 	public $content = NULL;
 
 	/**
-	 * View auto render?
-	 * @var boolean 
+	 * Wrapper for CMS::actions method.
+	 * Returned list of action names.
+	 *
+	 * @access  public
+	 * @return  array
+	 * @uses    CMS::actions
 	 */
-	public $auto_render = TRUE;
+	public function get_actions()
+	{
+		static $actions;
+		
+		if ( ! $actions)
+		{
+			$actions = CMS::actions($this);
+		}
+		
+		return $actions;
+	}
 
 	/**
 	 * Wrapper for request post method
@@ -127,54 +141,56 @@ abstract class Controller_CMS_Basic extends Controller
 	 * Check user authentication and authorization
 	 *
 	 * @return  void
+	 * @throw   HTTP_Exception
+	 * @uses    Auth::logged_in
+	 * @uses    HTTP_Exception::factory
 	 */
-	protected function _check_auth()
+	public function check_auth()
 	{
-		if ($this->check_auth)
+		if ( ! $this->user())
 		{
-			if ( ! $this->user())
-			{
-				throw HTTP_Exception::factory(401, 'Unauthorized user');
-			}
-			elseif ( ! $this->auth()->logged_in($this->auth_roles))
-			{
-				throw HTTP_Exception::factory(403, 'Access forbidden');
-			}
+			throw HTTP_Exception::factory(401, 'Unauthorized user');
+		}
+		elseif ( ! $this->auth()->logged_in($this->auth_roles))
+		{
+			throw HTTP_Exception::factory(403, 'Access forbidden');
 		}
 	}
 
 	/**
-	 * Load controller configuration
+	 * Load controller configuration from config parts
 	 *
+	 * @uses    CMS::tag
+	 * @uses    Arr::merge
+	 * @uses    Kohana::config
 	 * @return  void
 	 */
-	protected function _load_config()
+	public function set_config()
 	{
 		if (Kohana::$caching)
 		{
-			// Cache id
-			$tag = 'controller_config:'.implode(':', $this->config);
-			
-			if ($cfg = $this->cache()->get($tag, FALSE))
+			// Generate tag
+			$tag = CMS::tag('controller_config', $this->config);
+			// Try load from cache
+			if ($config = $this->cache()->get($tag, FALSE))
 			{
-				// Load from cache
-				$this->config = (array) $cfg;
-				
+				$this->config = $config;
 				return NULL;
 			}
 		}
-		// Load and merge config parts
-		$cfg = array();
-		foreach ($this->config as $config)
-		{
-			$cfg = Arr::merge($cfg, Kohana::config($config, TRUE));
-		}
-		$this->config = $cfg;
 		
-		// Save in cache
-		if (Kohana::$caching)
+		$config = array();
+		foreach ($this->config as $name)
 		{
-			$this->cache()->set($tag, $this->config, Date::DAY);
+			// Load and merge config parts
+			$config = Arr::merge($config, Kohana::config($name, TRUE));
+		}
+		$this->config = $config;
+		
+		if (Kohana::$caching AND ! empty($this->config))
+		{
+			// Save in cache
+			$this->cache()->set($tag, $this->config, Date::HOUR);
 		}
 	}
 
@@ -186,15 +202,43 @@ abstract class Controller_CMS_Basic extends Controller
 	 */
 	public function before()
 	{
+		/**
+		 * Controller:
+		 * 1. ---
+		 */
 		parent::before();
 		
-		// Check user access to action
-		$this->_check_auth();
+		if ($this->check_auth)
+		{
+			$this->check_auth();
+		}
 		
-		// Load controller configuration
-		$this->_load_config();
+		if ( ! empty($this->config))
+		{
+			$this->set_config();
+		}
 	}
 
+	/**
+	 * Sets request response options
+	 *
+	 * @return  void
+	 */
+	public function set_response()
+	{
+		if ( ! empty($this->headers) AND $this->request->is_initial())
+		{
+			// Sets HTTP header fields
+			$this->response->headers($this->headers);
+		}
+		
+		if ( ! empty($this->content))
+		{
+			// Send content in response body
+			$this->response->body($this->content);
+		}
+	}
+	
 	/**
 	 * Automatically executed after the controller action. Can be used to apply
 	 * transformation to the response, add extra output, and execute
@@ -204,36 +248,13 @@ abstract class Controller_CMS_Basic extends Controller
 	 */
 	public function after()
 	{
-		// Set HTTP header fields
-		if ( ! empty($this->headers) AND $this->request->is_initial())
-		{
-			$this->response->headers($this->headers);
-		}
+		$this-> set_response();
 		
-		// Render and set response content
-		if ($this->auto_render)
-		{
-			// $this->response->body($this->content->render());
-			$this->response->body($this->content);
-		}
-		
+		/**
+		 * Controller:
+		 * 1. ---
+		 */
 		parent::after();
-	}
-
-	/**
-	 * Issues a HTTP redirect.
-	 *
-	 * Proxies to the [HTTP::redirect] method.
-	 *
-	 * @param  string  $uri   URI to redirect to
-	 * @param  int     $code  HTTP Status code to use for the redirect
-	 * @throws HTTP_Exception
-	 */
-	public function redirect($uri = '', $code = 302)
-	{
-		$this->auto_render = FALSE;
-		
-		return HTTP::redirect( (string) $uri, $code);
 	}
 
 } // End Controller_Basic

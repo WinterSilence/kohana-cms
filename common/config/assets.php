@@ -1,16 +1,18 @@
 <?php defined('SYSPATH') OR die('No direct script access.');
 
 return array(
-	// Where to save compiled css and js files
-	'compile_dirs' => array(
-		'css' => DOCROOT.'media/css/assets/',
-		'js'  => DOCROOT.'media/js/assets/',
+	'default' => array(
+		// Where to save compiled css and js files
+		'compile' => array(
+			'css' => 'assets/'.APP.'/css/',
+			'js'  => 'assets/'.APP.'/js/',
+		),
+		// Where to get source css and js files
+		'source' => array(
+			'css' => APPPATH.'media/css/',
+			'js'  => APPPATH.'media/js/',
+		),
+		// LESS default directories to import from
+		'less' => array(),
 	),
-	// Where to get source css and js files
-	'source_dirs' => array(
-		'css' => DOCROOT.'media/css/',
-		'js'  => DOCROOT.'media/js/',
-	),
-	// LESS default directories to import from
-	'import_dirs' => array(),
 );

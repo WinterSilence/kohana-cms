@@ -47,6 +47,26 @@ abstract class Controller_CMS_Ajax extends Controller_Basic
 	}
 
 	/**
+	 * Sets request response options
+	 *
+	 * @return  void
+	 */
+	public function set_response()
+	{
+		// Add special header fields for AJAX requests
+		$this->headers = array_merge(
+			$this->headers, 
+			array(
+				'Content-Type'  => 'text/'.$this->data_type,
+				'Pragma'        => 'no-cache', 
+				'Cache-Control' => 'no-store, no-cache, must-revalidate',
+			)
+		);
+		
+		parent::set_response();
+	}
+
+	/**
 	 * Automatically executed after the controller action. Can be used to apply
 	 * transformation to the response, add extra output, and execute other custom code.
 	 * 
@@ -59,16 +79,6 @@ abstract class Controller_CMS_Ajax extends Controller_Basic
 		{
 			$this->content = CMS::convert($this->content, $this->data_type);
 		}
-		
-		// Add special header fields for AJAX requests
-		$this->headers = array_merge(
-			$this->headers, 
-			array(
-				'Content-Type'  => 'text/'.$this->data_type,
-				'Pragma'        => 'no-cache', 
-				'Cache-Control' => 'no-store, no-cache, must-revalidate',
-			)
-		);
 		
 		parent::after();
 	}

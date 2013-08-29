@@ -1,12 +1,5 @@
 <?php defined('SYSPATH') OR die('No direct script access.') ?>
 
-<style type="text/css">
-<?php include_once Kohana::find_file('media', 'css/profiler', 'css') ?>
-</style>
-<script type="text/javascript">
-<?php include_once Kohana::find_file('media', 'js/jquery.profiler', 'js') ?>
-</script>
-
 <?php
 $group_stats      = Profiler::group_stats();
 $group_cols       = array('min', 'max', 'average', 'total');

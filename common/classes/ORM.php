@@ -16,8 +16,9 @@ class ORM extends Kohana_ORM
 			// TODO: 
 			//return parent::__construct($id);
 			parent::__construct($id);
+			
 			// Saving columns in config file for add in model
-			if (Kohana::$environment != Kohana::PRODUCTION)
+			if (empty($this->_table_columns) AND Kohana::$environment != Kohana::PRODUCTION)
 			{
 				$path = APPPATH.'config'.DS.CMS::path($this).EXT;
 				File::var_export($this->_table_columns, $path, TRUE);
@@ -169,9 +170,10 @@ class ORM extends Kohana_ORM
 	/**
 	 * Get items per page
 	 */
-	public function find_items_per_page($offset = 0, $limit = 10, $order = NULL, $direction = 'asc')
+	public function find_items($offset = 0, $limit = 10, $order = NULL, $direction = 'asc')
 	{
-		return $this->order_by(($order ? $order : $this->pk()), $direction)
+		$order = ($order ? $order : $this->primary_key());
+		return $this->order_by($order, $direction)
 					->offset($offset)
 					->limit($limit)
 					->find_all()

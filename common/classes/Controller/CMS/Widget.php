@@ -31,9 +31,6 @@ abstract class Controller_CMS_Widget extends Controller_Layout
 		// Widget have only index action
 		$this->request->action('index');
 		
-		// Add widget config
-		$this->config[] = CMS::path($this);
-		
 		parent::before();
 	}
 

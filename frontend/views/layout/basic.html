@@ -27,7 +27,10 @@
 							<a href="/info/page/portfolio/">Портфолио</a>
 						</li>
 						<li>
-							<a href="/blog/">Блог</a>
+							<a href="/blog/">{'Blog'|i18n}</a>
+						</li>
+						<li>
+							<a href="/feedback/">{'Write us'|i18n}</a>
 						</li>
 					</ul>
 					{snippet name="contacts"}
@@ -39,24 +42,14 @@
 	
 	<div class="g-row" id="content">
 		<article class="g-9">
+			{snippet name="breadcrumbs" items=$config.breadcrumbs}
 			{$content|default:''}
 			{snippet name="debug"}
 		</article>
 		<aside class="g-3">
 			<div id="sidebar">
-				<h4 class="header">Категории:</h4>
-				<ul class="f-nav-list f-nav-tabs">
-					<li><a href="#">Своя CMS на Kohana</a></li>
-					<li><a href="#">Kohana</a></li>
-					<li><a href="#">PHP</a></li>
-					<li><a href="#">Jquery</a></li>
-					<li><a href="#">HTML & CSS</a></li>
-					<li><a href="#">Базы данных</a></li>
-					<li><a href="#">IT новости</a></li>
-					<li><a href="#">SEO</a></li>
-					<li><a href="#">Вне сети</a></li>
-				</ul>
-				{widget name="tagcloud" items="20"}
+				{widget name="blog_categories"}
+				{widget name="blog_tags" items_to_show="20"}
 			</div>
 		</aside>
 	</div>

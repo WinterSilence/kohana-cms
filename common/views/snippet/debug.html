@@ -1,16 +1,10 @@
 {if Kohana::$profiling}
-<div id="debug" class="f-nav-bar">
-	<ul>
-		<li>
-			<h4 class="header">{'Kohana profiler'|i18n}</h4>
-			<div class="content">{View::factory('profiler/stats')}</div>
-		</li>
-		{*
-		<li>
-			<h4 class="header">{'Smarty console'|i18n}</h4>
-			<div class="content">{debug}</div>
-		</li>
-		*}
-	</ul>
+<div id="debug">
+	<h4 class="header f-nav-bar">{'Kohana profiler'|i18n}</h4>
+	<div class="content">{View::factory('profiler/stats')}</div>
+	{*
+	<h4 class="header f-nav-bar">{'Smarty console'|i18n}</h4>
+	<div class="content">{debug}</div>
+	*}
 </div>
 {/if}

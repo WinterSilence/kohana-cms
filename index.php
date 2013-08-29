@@ -1,5 +1,4 @@
 <?php
-
 // Short aliases for system constants 
 define('DS',  DIRECTORY_SEPARATOR);
 define('EOL', PHP_EOL);
@@ -60,16 +59,6 @@ $modules = 'modules';
 $system = 'system';
 
 /**
- * The directories in which your public media content (css, js, fonts).
- */
-$media = 'media';
-
-/**
- * The directories in which third-party libraries and classes.
- */
-$vendor = 'vendor';
-
-/**
  * The default extension of resource files. If you change this, all resources
  * must be renamed to use the new extension.
  *
@@ -114,23 +103,13 @@ if ( ! is_dir($modules) AND is_dir(DOCROOT.$modules))
 if ( ! is_dir($system) AND is_dir(DOCROOT.$system))
 	$system = DOCROOT.$system;
 
-// Make the media relative to the docroot, for symlink'd index.php
-if ( ! is_dir($media) AND is_dir(DOCROOT.$media))
-	$media = DOCROOT.$media;
-
-// Make the vendor relative to the docroot, for symlink'd index.php
-if ( ! is_dir($vendor) AND is_dir(DOCROOT.$vendor))
-	$vendor = DOCROOT.$vendor;
-
 // Define the absolute paths for configured directories
 define('APPPATH',    realpath($application).DS);
 define('MODPATH',    realpath($modules).DS);
 define('SYSPATH',    realpath($system).DS);
-define('MEDIAPATH',  realpath($media).DS);
-define('VENDORPATH', realpath($vendor).DS);
 
 // Clean up the configuration vars
-unset($application, $modules, $system, $media, $vendor);
+unset($application, $modules, $system);
 
 /*
 if (file_exists('install'.EXT))
