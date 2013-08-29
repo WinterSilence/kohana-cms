@@ -1,0 +1,1 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');return array(	'assets' => array(		'css' => array('snippet/debug.css'),		'js'  => array('snippet/debug.js'),	),);

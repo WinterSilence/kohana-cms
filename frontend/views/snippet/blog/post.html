@@ -1,0 +1,47 @@
+{if isset($post)}
+
+{if ! isset($type)}{$type = 'full'}{/if}
+{if is_object($post)}{$post = $post->as_array()}{/if}
+
+<div class="g-row post">
+	<h4 class="header">
+		{if $type == 'short'}
+		<a href="{"controller:blog,action:post,id:`$post.slug`"|url}">{$post.name}</a>
+		{else}
+		{$post.name}
+		{/if}
+	</h4>
+	<div class="f-bwi content">
+		{if isset($post.picture)}<img class="f-bwi-pic" src="{$post.picture}" alt="{$post.name}">{/if}
+		{if $type == 'short'}
+		{$post.content_brief}
+		{else}
+		{$post.content}
+		{/if}
+	</div>
+	<div class="footer">
+		<span class="date">{'Published'|i18n}: {$post.date_add}</span>
+		{if count($post_categories)}
+		<span class="categories">
+			{'Categories'|i18n}: 
+			{foreach $post_categories as $category}
+			<a href="{$category->url}">{$category->name}</a>, 
+			{/foreach}
+		</span>
+		{/if}
+		{if count($post_tags)}
+		<span class="tags">
+			{'Tags'|i18n}: 
+			{foreach $post_tags as $tag}
+			<a href="{$tag->id}">{$tag->name}</a>, 
+			{/foreach}
+		</span>
+		{/if}
+		{if $type == 'short'}
+		<span class="more">
+			<a href="{"controller:blog,action:post,id:`$post.slug`"|url}">{'Read more'|i18n} »</a>
+		</span>
+		{/if}
+	</div>
+</div>
+{/if}

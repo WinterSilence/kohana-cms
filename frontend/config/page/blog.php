@@ -1,0 +1,1 @@
+<?php defined('SYSPATH') OR die('No direct access allowed.');return array(	'meta_tags' => array(		'title'       => array('Blog'),		'description' => 'Blog description',		'keywords'    => 'Blog keywords',	),	'breadcrumbs' => array('controller:blog' => 'Blog'),);

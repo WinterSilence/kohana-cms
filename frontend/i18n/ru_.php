@@ -1,0 +1,21 @@
+<?php defined('SYSPATH') OR die('No direct script access.');
+return array(
+	'Validation' => 'Validation',
+	'PHP internal call' => 'PHP internal call',
+	'arguments' => 'arguments',
+	'Database (default)' => 'Database (default)',
+	'Write us' => 'Write us',
+	'Blog' => 'Blog',
+	'The requested URL :uri was not found on this server.' => 'The requested URL :uri was not found on this server.',
+	'Required route parameter not passed: :param' => 'Required route parameter not passed: :param',
+	'Blog category :name not exists' => 'Blog category :name not exists',
+	':error [ :query ]' => ':error [ :query ]',
+	'Read more' => 'Read more',
+	'Category' => 'Category',
+	'The :property property does not exist in the :class class' => 'The :property property does not exist in the :class class',
+	'Empty list' => 'Empty list',
+	'Widget :name is not specified' => 'Widget :name is not specified',
+	'Previous' => 'Previous',
+	'Next' => 'Next',
+	'The requested view :file.:ext could not be found' => 'The requested view :file.:ext could not be found',
+);

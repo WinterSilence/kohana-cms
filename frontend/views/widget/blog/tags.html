@@ -1,0 +1,10 @@
+{if isset($tags)}
+<h4 class="header">{'Tag cloud'|i18n}:</h4>
+<div id="tag_cloud">
+	{$positions = ['top', 'middle', 'bottom']}
+	{foreach $tags as $tag}
+	{$position = array_rand($positions)}
+	<a class="tag tag{$tag.weight|default:0} {$positions[$position]}" href="{"controller:blog,action:tag,id:`$tag.slug`"|url}">{$tag.name}</a>
+	{/foreach}
+</div>
+{/if}

@@ -1,0 +1,30 @@
+define('CSSPATH',   MEDIAPATH.$css.DS);
+define('JSPATH',    MEDIAPATH.$js.DS);
+define('IMGPATH',   MEDIAPATH.$img.DS);
+/*
+define('DOCPATH',   MEDIAPATH.$doc.DS);
+define('VIDEOPATH', MEDIAPATH.$video.DS);
+define('FLASHPATH', MEDIAPATH.$flash.DS);
+*/
+
+$css   = $media.DS.'css';
+$js    = $media.DS.'js';
+$img   = $media.DS.'img';
+/*
+$doc   = $media.DS.'doc';
+$video = $media.DS.'video';
+$flash = $media.DS.'flash';
+*/
+
+/**
+ * Media derectories uri
+ */
+define('MEDIA_URL', APP_ALIAS.$media.'/');
+define('CSS_URL',   MEDIA_URL.'css/');
+define('JS_URL',    MEDIA_URL.'js/');
+define('IMG_URL',   MEDIA_URL.'img/');
+/*
+define('DOC_URL',   MEDIA_URL.'doc/');
+define('VIDEO_URL', MEDIA_URL.'video/');
+define('FLASH_URL', MEDIA_URL.'flash/');
+*/

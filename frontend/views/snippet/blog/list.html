@@ -1,0 +1,16 @@
+{if isset($posts)}
+	
+	{if ! isset($type)}{$type = 'full'}{/if}
+	
+	{if is_object($posts)}{$posts = $posts->as_array()}{/if}
+	{foreach $posts as $post}
+	{snippet name="blog_post" post=$post type=$type}
+	{/foreach}
+	
+	{widget name="pagination"}
+	
+{else}
+	
+	<h4>{'Empty list'|i18n}</h4>
+	
+{/if}

@@ -1,0 +1,10 @@
+{if isset($category)}
+	
+	<div class="category">
+		<div class="content">{$category.description}</div>
+	</div>
+	
+	{snippet name="blog_list" posts=$posts type='short'}
+	<br>
+	
+{/if}

@@ -1,0 +1,12 @@
+{if isset($blog_categories)}
+
+<h4 class="header">{'Categories'|i18n}:</h4>
+<ul class="f-nav-list f-nav-tabs">
+	{$current_url = ""|url}
+	{foreach $blog_categories as $category}
+	{$url = "controller:blog,action:category,id:`$category->slug`"|url}
+	<li{if $current_url == $url} class="active"{/if}><a href="{$url}">{$category->name}</a></li>
+	{/foreach}
+</ul>
+
+{/if}
