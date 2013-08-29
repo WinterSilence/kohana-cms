@@ -1,6 +1,6 @@
 [submodule "system"]
 	path = system
-	url  = https://github.com/kohana/core.git
+	url  = https://github.com/WinterSilence/core.git
 	
 [submodule "modules/database"]
 	path = modules/database
@@ -48,4 +48,4 @@
 	
 [submodule "common/vendor/smarty"]
 	path = common/vendor/smarty
-	url = https://github.com/opensolutions/smarty.git
+	url = https://github.com/WinterSilence/smarty.git
